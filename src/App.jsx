@@ -7,6 +7,12 @@ import ScheduleAndTrainers from './components/ScheduleAndTrainers';
 export default function App() {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+   const WHATSAPP_NUMBER = '917089851668';
+  const [leadForm, setLeadForm] = useState({
+    name: '',
+    phone: '',
+    goal: 'Muscle Gain / Strength',
+  });
 
   const plans = [
     {
@@ -184,42 +190,108 @@ export default function App() {
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-zinc-900 border border-white/15 rounded-2xl max-w-md w-full p-6 relative">
             <button
-              onClick={() => setSelectedPlan(null)}
+              type="button"
+              onClick={() => {
+                setSelectedPlan(null);
+                setSubmitted(false);
+              }}
               className="absolute top-4 right-4 text-zinc-400 hover:text-white cursor-pointer"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5" />
             </button>
-            {submitted ? (
-              <div className="py-10 text-center space-y-3">
-                <div className="w-12 h-12 rounded-full bg-[#ccff00]/20 text-[#ccff00] flex items-center justify-center mx-auto">
+
+            {!submitted ? (
+              <>
+                <p className="text-xs font-bold tracking-widest uppercase text-[#ccff00]">
+                  IRONPULSE LEAD INQUIRY
+                </p>
+                <h3 className="text-2xl font-black mt-1">
+                  {selectedPlan}
+                </h3>
+                <p className="text-xs text-zinc-400 mt-1">
+                  Apni details bhar kar instant WhatsApp par slot ya membership confirm karein.
+                </p>
+
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setSubmitted(true);
+                  }}
+                  className="mt-5 space-y-4"
+                >
+                  <div>
+                    <label className="block text-xs font-semibold text-zinc-300 mb-1">
+                      Full Name
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={leadForm.name}
+                      onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
+                      placeholder="Apna naam likhein"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-sm text-white focus:outline-none focus:border-[#ccff00]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-zinc-300 mb-1">
+                      Phone / WhatsApp Number
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      value={leadForm.phone}
+                      onChange={(e) => setLeadForm({ ...leadForm, phone: e.target.value })}
+                      placeholder="10-digit mobile number"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-sm text-white focus:outline-none focus:border-[#ccff00]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-zinc-300 mb-1">
+                      Primary Goal
+                    </label>
+                    <select
+                      value={leadForm.goal}
+                      onChange={(e) => setLeadForm({ ...leadForm, goal: e.target.value })}
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-sm text-white focus:outline-none focus:border-[#ccff00]"
+                    >
+                      <option value="Muscle Gain / Strength">Muscle Gain / Strength</option>
+                      <option value="Fat Loss & Conditioning">Fat Loss & Conditioning</option>
+                      <option value="General Fitness & Mobility">General Fitness & Mobility</option>
+                    </select>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-3 rounded-full bg-[#ccff00] text-black font-extrabold text-sm hover:bg-[#b8e600] transition cursor-pointer"
+                  >
+                    CONTINUE TO WHATSAPP
+                  </button>
+                </form>
+              </>
+            ) : (
+              <div className="text-center py-4 space-y-4">
+                <div className="w-12 h-12 rounded-full bg-[#ccff00]/15 text-[#ccff00] flex items-center justify-center mx-auto">
                   <Check className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-bold">Welcome to IronPulse!</h3>
-                <p className="text-zinc-400 text-sm">Our team will contact you shortly for your {selectedPlan} pass.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleJoin} className="space-y-4">
-                <h3 className="text-2xl font-bold">Join <span className="text-[#ccff00]">{selectedPlan}</span></h3>
-                <p className="text-sm text-zinc-400">Fill in your details to book your free trial & onboarding.</p>
-                <input
-                  required
-                  type="text"
-                  placeholder="Full Name"
-                  className="w-full px-4 py-3 rounded-xl bg-black/50 border border-white/10 focus:border-[#ccff00] outline-none text-sm"
-                />
-                <input
-                  required
-                  type="tel"
-                  placeholder="Phone Number (+91)"
-                  className="w-full px-4 py-3 rounded-xl bg-black/50 border border-white/10 focus:border-[#ccff00] outline-none text-sm"
-                />
-                <button
-                  type="submit"
-                  className="w-full bg-[#ccff00] text-black font-bold py-3.5 rounded-xl hover:bg-[#b8e600] transition cursor-pointer"
+                <h3 className="text-xl font-black">Inquiry Ready!</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  <span className="text-white font-semibold">{leadForm.name}</span> ({leadForm.phone}) —{' '}
+                  <span className="text-[#ccff00]">{selectedPlan}</span> ({leadForm.goal})
+                </p>
+
+                <a
+                  href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                    `Hi IronPulse! Main ${selectedPlan} ke liye inquiry karna chahta/chahti hoon.\nName: ${leadForm.name}\nPhone: ${leadForm.phone}\nGoal: ${leadForm.goal}`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center w-full py-3 rounded-full bg-[#ccff00] text-black font-extrabold text-sm hover:bg-[#b8e600] transition"
                 >
-                  CONFIRM MEMBERSHIP
-                </button>
-              </form>
+                  SEND ON WHATSAPP
+                </a>
+              </div>
             )}
           </div>
         </div>
